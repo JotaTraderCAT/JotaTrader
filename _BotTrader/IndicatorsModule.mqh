@@ -22,7 +22,40 @@ struct SIndicatorData
 //+------------------------------------------------------------------+
 //| Internal state                                                   |
 //+------------------------------------------------------------------+
-int g_atrHandle=-1;
+int g_atrHandle=INVALID_HANDLE;
+
+bool GetCurrentATR(double &atr_out)
+  {
+   atr_out=0.0;
+
+   if(g_atrHandle==INVALID_HANDLE)
+     {
+      const string symbol=ActiveSymbol();
+      const ENUM_TIMEFRAMES tf=ActiveTimeframe();
+      g_atrHandle=iATR(symbol,tf,Inp_ATR_Period);
+      if(g_atrHandle==INVALID_HANDLE)
+        {
+         Print("[Indicators] Failed to create ATR handle. Error: ",GetLastError());
+         return(false);
+        }
+     }
+
+   double atr_buffer[1];
+   if(CopyBuffer(g_atrHandle,0,1,1,atr_buffer)!=1)
+     {
+      Print("[Indicators] Failed to copy ATR buffer. Error: ",GetLastError());
+      return(false);
+     }
+
+   if(atr_buffer[0]<=0.0)
+     {
+      Print("[Indicators] Invalid ATR value retrieved");
+      return(false);
+     }
+
+   atr_out=atr_buffer[0];
+   return(true);
+  }
 
 //+------------------------------------------------------------------+
 //| Helpers                                                          |
@@ -89,11 +122,10 @@ bool IndicatorsCalculate(SIndicatorData &data)
          return(false);
      }
 
-   // ATR value from the last completed bar
-   double atr_buffer[1];
-   if(CopyBuffer(g_atrHandle,0,1,1,atr_buffer)<=0)
+   double atr_value=0.0;
+   if(!GetCurrentATR(atr_value))
      {
-      Print("[Indicators] Failed to copy ATR buffer. Error: ",GetLastError());
+      Print("[Indicators] ATR value unavailable; skipping calculation");
       return(false);
      }
 
@@ -124,7 +156,7 @@ bool IndicatorsCalculate(SIndicatorData &data)
       return(false);
      }
 
-   data.atr=atr_buffer[0];
+   data.atr=atr_value;
    data.donchianHighEntry=ArrayMaxValue(highs_entry,Inp_DonchianEntradaPeriod);
    data.donchianLowEntry=ArrayMinValue(lows_entry,Inp_DonchianEntradaPeriod);
    data.donchianHighExit=ArrayMaxValue(highs_exit,Inp_DonchianSalidaPeriod);

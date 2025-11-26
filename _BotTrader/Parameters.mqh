@@ -28,7 +28,7 @@ input int             Inp_DonchianSalidaPeriod  = 20;         // Donchian period
 input bool            Inp_RupturaUsarCierre     = true;       // Use candle close for breakout
 input int             Inp_RupturaBufferPuntos   = 100;        // Buffer points above Donchian high
 
-input int             Inp_ATR_Period          = 14;           // ATR period
+input int             Inp_ATR_Period          = 20;           // ATR period
 input double          Inp_ATR_Mult_SL         = 2.0;          // ATR multiplier for stop loss
 
 //+------------------------------------------------------------------+
@@ -59,12 +59,12 @@ bool ValidateParameters()
       Print("Invalid Donchian exit period");
       valid=false;
      }
-   if(Inp_ATR_Period<=0)
-     {
-      Print("Invalid ATR period");
-      valid=false;
-     }
-   if(Inp_SpreadMaximo<=0)
+  if(Inp_ATR_Period<=0)
+    {
+     Print("Invalid ATR period");
+     valid=false;
+    }
+   if(Inp_SpreadMaximo<0)
      {
       Print("Invalid maximum spread");
       valid=false;
