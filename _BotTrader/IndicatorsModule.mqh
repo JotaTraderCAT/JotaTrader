@@ -27,7 +27,7 @@ int g_atrHandle=-1;
 //+------------------------------------------------------------------+
 //| Helpers                                                          |
 //+------------------------------------------------------------------+
-double ArrayMaximum(const double &values[],int count)
+double ArrayMaxValue(const double &values[],int count)
   {
    double max_value=values[0];
    for(int i=1;i<count;i++)
@@ -38,7 +38,7 @@ double ArrayMaximum(const double &values[],int count)
    return(max_value);
   }
 
-double ArrayMinimum(const double &values[],int count)
+double ArrayMinValue(const double &values[],int count)
   {
    double min_value=values[0];
    for(int i=1;i<count;i++)
@@ -125,10 +125,10 @@ bool IndicatorsCalculate(SIndicatorData &data)
      }
 
    data.atr=atr_buffer[0];
-   data.donchianHighEntry=ArrayMaximum(highs_entry,Inp_DonchianEntradaPeriod);
-   data.donchianLowEntry=ArrayMinimum(lows_entry,Inp_DonchianEntradaPeriod);
-   data.donchianHighExit=ArrayMaximum(highs_exit,Inp_DonchianSalidaPeriod);
-   data.donchianLowExit=ArrayMinimum(lows_exit,Inp_DonchianSalidaPeriod);
+   data.donchianHighEntry=ArrayMaxValue(highs_entry,Inp_DonchianEntradaPeriod);
+   data.donchianLowEntry=ArrayMinValue(lows_entry,Inp_DonchianEntradaPeriod);
+   data.donchianHighExit=ArrayMaxValue(highs_exit,Inp_DonchianSalidaPeriod);
+   data.donchianLowExit=ArrayMinValue(lows_exit,Inp_DonchianSalidaPeriod);
    data.lastCalculation=TimeCurrent();
    return(true);
   }

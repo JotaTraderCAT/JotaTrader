@@ -72,14 +72,16 @@ bool ClosePosition(const string reason)
    if(g_position.Magic()!=(long)Inp_Magic)
       return(false);
 
-   double close_price=0.0;
-   if(!SymbolInfoDouble(ActiveSymbol(),SYMBOL_BID,close_price))
+   double volume=g_position.Volume();
+   if(volume<=0.0)
      {
-      Print("[Trade] Failed to get bid price for close. Error: ",GetLastError());
+      Print("[Trade] Invalid volume for close");
       return(false);
      }
 
-   bool result=g_trade.PositionClose(ActiveSymbol(),close_price,Inp_SlippagePoints);
+   g_trade.SetDeviationInPoints(Inp_SlippagePoints);
+
+   bool result=g_trade.PositionClose(ActiveSymbol(),volume);
    if(!result)
      {
       Print("[Trade] Failed to close position. Reason: ",reason," Error: ",GetLastError());
@@ -97,6 +99,8 @@ bool UpdateStopLoss(const double new_sl)
       return(false);
 
    double current_tp=g_position.TakeProfit();
+   g_trade.SetDeviationInPoints(Inp_SlippagePoints);
+
    bool result=g_trade.PositionModify(ActiveSymbol(),new_sl,current_tp);
    if(!result)
      {
