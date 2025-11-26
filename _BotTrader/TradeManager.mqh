@@ -16,7 +16,7 @@ CPositionInfo  g_position;
 //+------------------------------------------------------------------+
 bool TradeManagerInit()
   {
-   g_trade.SetExpertMagicNumber((long)Inp_Magic);
+   g_trade.SetExpertMagicNumber(Inp_Magic);
    g_trade.SetDeviationInPoints(Inp_SlippagePoints);
    return(true);
   }
@@ -32,7 +32,7 @@ bool HasOpenPosition()
   {
    if(g_position.Select(ActiveSymbol()))
      {
-      if(g_position.Magic()==(long)Inp_Magic)
+      if(g_position.Magic()==Inp_Magic)
          return(true);
      }
    return(false);
@@ -51,7 +51,7 @@ bool OpenBuy(const double lot,const double sl,const double tp)
       return(false);
      }
 
-   g_trade.SetExpertMagicNumber((long)Inp_Magic);
+   g_trade.SetExpertMagicNumber(Inp_Magic);
    g_trade.SetDeviationInPoints(Inp_SlippagePoints);
 
    bool result=g_trade.Buy(lot,symbol,ask,sl,tp,Inp_TradeComment);
@@ -69,17 +69,12 @@ bool ClosePosition(const string reason)
    if(!g_position.Select(ActiveSymbol()))
       return(false);
 
-   if(g_position.Magic()!=(long)Inp_Magic)
+   if(g_position.Magic()!=Inp_Magic)
       return(false);
 
-   double close_price=0.0;
-   if(!SymbolInfoDouble(ActiveSymbol(),SYMBOL_BID,close_price))
-     {
-      Print("[Trade] Failed to get bid price for close. Error: ",GetLastError());
-      return(false);
-     }
+   g_trade.SetDeviationInPoints(Inp_SlippagePoints);
 
-   bool result=g_trade.PositionClose(ActiveSymbol(),close_price,Inp_SlippagePoints);
+   bool result=g_trade.PositionClose(ActiveSymbol());
    if(!result)
      {
       Print("[Trade] Failed to close position. Reason: ",reason," Error: ",GetLastError());
@@ -93,10 +88,12 @@ bool UpdateStopLoss(const double new_sl)
    if(!g_position.Select(ActiveSymbol()))
       return(false);
 
-   if(g_position.Magic()!=(long)Inp_Magic)
+   if(g_position.Magic()!=Inp_Magic)
       return(false);
 
    double current_tp=g_position.TakeProfit();
+   g_trade.SetDeviationInPoints(Inp_SlippagePoints);
+
    bool result=g_trade.PositionModify(ActiveSymbol(),new_sl,current_tp);
    if(!result)
      {
