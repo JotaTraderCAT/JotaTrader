@@ -6,13 +6,13 @@
 #property version   "1.30"
 #property strict
 
-#include <BotTrader/Parameters.mqh>
-#include <BotTrader/IndicatorsModule.mqh>
-#include <BotTrader/SignalsModule.mqh>
-#include <BotTrader/RiskManager.mqh>
-#include <BotTrader/TradeManager.mqh>
-#include <BotTrader/ExitManager.mqh>
-#include <BotTrader/Visualization.mqh>
+#include <_BotTrader/Parameters.mqh>
+#include <_BotTrader/IndicatorsModule.mqh>
+#include <_BotTrader/SignalsModule.mqh>
+#include <_BotTrader/RiskManager.mqh>
+#include <_BotTrader/TradeManager.mqh>
+#include <_BotTrader/ExitManager.mqh>
+#include <_BotTrader/Visualization.mqh>
 
 //+------------------------------------------------------------------+
 //| Expert initialization function                                   |
