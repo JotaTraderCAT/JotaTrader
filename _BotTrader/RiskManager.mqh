@@ -104,11 +104,13 @@ double RiskManagerNormalizeStopLoss(const double entry_price,const double sl_pri
       Print("[Risk] Failed to obtain point size for ",symbol,". Error: ",GetLastError());
       return(sl_price);
      }
-   int digits=(int)SymbolInfoInteger(symbol,SYMBOL_DIGITS);
+   long digits=0;
+   if(!SymbolInfoInteger(symbol,SYMBOL_DIGITS,digits))
+      digits=_Digits;
 
-   normalized_sl=NormalizeDouble(normalized_sl,digits);
+   normalized_sl=NormalizeDouble(normalized_sl,(int)digits);
 
-   int stop_level=0;
+   long stop_level=0;
    if(!SymbolInfoInteger(symbol,SYMBOL_TRADE_STOPS_LEVEL,stop_level))
       stop_level=0;
 
