@@ -19,20 +19,46 @@ void RiskManagerDeinit()
   }
 
 //+------------------------------------------------------------------+
+//| Spread helpers                                                   |
+//+------------------------------------------------------------------+
+double CurrentSpreadPoints()
+  {
+   const string symbol=ActiveSymbol();
+   double bid=0.0;
+   double ask=0.0;
+   double point=0.0;
+
+   if(!SymbolInfoDouble(symbol,SYMBOL_BID,bid) ||
+      !SymbolInfoDouble(symbol,SYMBOL_ASK,ask) ||
+      !SymbolInfoDouble(symbol,SYMBOL_POINT,point))
+     {
+      Print("[Risk] Failed to retrieve spread components for ",symbol,
+            ". Error: ",GetLastError());
+      return(0.0);
+     }
+
+   if(point<=0.0 || bid<=0.0 || ask<=0.0)
+      return(0.0);
+
+   return((ask-bid)/point);
+  }
+
+//+------------------------------------------------------------------+
 //| Spread check                                                     |
 //+------------------------------------------------------------------+
 bool RiskManagerCheckSpread()
   {
-   const string symbol=ActiveSymbol();
-   long spread=0;
-   if(!SymbolInfoInteger(symbol,SYMBOL_SPREAD,spread))
+   double spread_points=CurrentSpreadPoints();
+   if(spread_points<=0.0)
      {
-      Print("[Risk] Failed to get spread for ",symbol,". Error: ",GetLastError());
+      Print("[Risk] Invalid spread measurement. SpreadPoints=",spread_points);
       return(false);
      }
-   if(spread>Inp_SpreadMaximo)
+
+   if(Inp_SpreadMaximo>0 && spread_points>Inp_SpreadMaximo)
      {
-      Print("[Risk] Spread too high: ",spread," > ",Inp_SpreadMaximo);
+      PrintFormat("[Risk] Spread too high: %.1f pts (max=%.1f)",spread_points,
+                  (double)Inp_SpreadMaximo);
       return(false);
      }
    return(true);

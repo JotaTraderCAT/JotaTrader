@@ -66,7 +66,11 @@ ESignalAction CheckEntrySignal(const SIndicatorData &data)
 
    double breakout_level=data.donchianHighEntry + (Inp_RupturaBufferPuntos*point);
    if(price_source>breakout_level)
+     {
+      PrintFormat("[Signals] BUY signal: close/price=%.2f breakout=%.2f (DonchianHigh=%.2f, buffer=%d)",
+                  price_source,breakout_level,data.donchianHighEntry,Inp_RupturaBufferPuntos);
       return(SIGNAL_BUY);
+     }
 
    return(SIGNAL_NONE);
   }
