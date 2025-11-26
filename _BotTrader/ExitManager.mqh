@@ -31,7 +31,12 @@ void ManageOpenPosition(const SIndicatorData &data)
 
    const string symbol=ActiveSymbol();
    const ENUM_TIMEFRAMES tf=ActiveTimeframe();
-   double point=SymbolInfoDouble(symbol,SYMBOL_POINT);
+   double point=0.0;
+   if(!SymbolInfoDouble(symbol,SYMBOL_POINT,point))
+     {
+      Print("[Exit] Failed to obtain point size for ",symbol,". Error: ",GetLastError());
+      return;
+     }
 
    if(!g_position.Select(symbol))
       return;

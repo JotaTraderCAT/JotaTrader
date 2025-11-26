@@ -105,7 +105,13 @@ void OnTick()
      }
 
    const string symbol=ActiveSymbol();
-   const double ask=SymbolInfoDouble(symbol,SYMBOL_ASK);
+   double ask=0.0;
+   if(!SymbolInfoDouble(symbol,SYMBOL_ASK,ask))
+     {
+      Print("[OnTick] Failed to obtain ask price for ",symbol,". Error: ",GetLastError());
+      VisualizationUpdate(indicator_data);
+      return;
+     }
 
    double stop_loss=ask-(indicator_data.atr*Inp_ATR_Mult_SL);
    stop_loss=RiskManagerNormalizeStopLoss(ask,stop_loss,true);
