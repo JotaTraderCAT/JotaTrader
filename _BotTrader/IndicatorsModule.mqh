@@ -1,4 +1,9 @@
-#pragma once
+//+------------------------------------------------------------------+
+//| Indicators module                                                |
+//+------------------------------------------------------------------+
+#ifndef __BOTTRADER_INDICATORS_MQH__
+#define __BOTTRADER_INDICATORS_MQH__
+
 #include <_BotTrader/Parameters.mqh>
 
 //+------------------------------------------------------------------+
@@ -127,4 +132,5 @@ bool IndicatorsCalculate(SIndicatorData &data)
    data.lastCalculation=TimeCurrent();
    return(true);
   }
+#endif // __BOTTRADER_INDICATORS_MQH__
 //+------------------------------------------------------------------+

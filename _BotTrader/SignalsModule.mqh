@@ -1,4 +1,9 @@
-#pragma once
+//+------------------------------------------------------------------+
+//| Signals module                                                   |
+//+------------------------------------------------------------------+
+#ifndef __BOTTRADER_SIGNALS_MQH__
+#define __BOTTRADER_SIGNALS_MQH__
+
 #include <_BotTrader/Parameters.mqh>
 #include <_BotTrader/IndicatorsModule.mqh>
 
@@ -54,4 +59,5 @@ ESignalAction CheckEntrySignal(const SIndicatorData &data)
 
    return(SIGNAL_NONE);
   }
+#endif // __BOTTRADER_SIGNALS_MQH__
 //+------------------------------------------------------------------+

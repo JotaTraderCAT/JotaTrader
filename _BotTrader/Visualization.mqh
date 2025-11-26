@@ -1,4 +1,9 @@
-#pragma once
+//+------------------------------------------------------------------+
+//| Visualization module                                             |
+//+------------------------------------------------------------------+
+#ifndef __BOTTRADER_VISUALIZATION_MQH__
+#define __BOTTRADER_VISUALIZATION_MQH__
+
 #include <_BotTrader/Parameters.mqh>
 #include <_BotTrader/IndicatorsModule.mqh>
 
@@ -24,4 +29,5 @@ void VisualizationUpdate(const SIndicatorData &data)
    text+="Magic: "+IntegerToString((int)Inp_Magic)+" Comment: "+Inp_TradeComment;
    Comment(text);
   }
+#endif // __BOTTRADER_VISUALIZATION_MQH__
 //+------------------------------------------------------------------+

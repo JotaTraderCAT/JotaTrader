@@ -1,7 +1,8 @@
-#pragma once
 //+------------------------------------------------------------------+
 //| Parameters and configuration                                     |
 //+------------------------------------------------------------------+
+#ifndef __BOTTRADER_PARAMETERS_MQH__
+#define __BOTTRADER_PARAMETERS_MQH__
 input string          Inp_Symbol              = "";          // Symbol to trade (empty for current)
 input ENUM_TIMEFRAMES Inp_MainTF              = PERIOD_M1;    // Timeframe for signals
 input ulong           Inp_Magic               = 56001001;     // Magic number
@@ -86,6 +87,7 @@ bool IsWithinTradingSession()
       return(current_minutes>=start_minutes && current_minutes<=end_minutes);
 
    // Overnight session
-   return(current_minutes>=start_minutes || current_minutes<=end_minutes);
+  return(current_minutes>=start_minutes || current_minutes<=end_minutes);
   }
+#endif // __BOTTRADER_PARAMETERS_MQH__
 //+------------------------------------------------------------------+

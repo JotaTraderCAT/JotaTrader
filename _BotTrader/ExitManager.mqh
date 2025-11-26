@@ -1,4 +1,9 @@
-#pragma once
+//+------------------------------------------------------------------+
+//| Exit management module                                           |
+//+------------------------------------------------------------------+
+#ifndef __BOTTRADER_EXIT_MQH__
+#define __BOTTRADER_EXIT_MQH__
+
 #include <_BotTrader/Parameters.mqh>
 #include <_BotTrader/IndicatorsModule.mqh>
 #include <_BotTrader/TradeManager.mqh>
@@ -58,4 +63,5 @@ void ManageOpenPosition(const SIndicatorData &data)
       UpdateStopLoss(atr_based_sl);
      }
   }
+#endif // __BOTTRADER_EXIT_MQH__
 //+------------------------------------------------------------------+

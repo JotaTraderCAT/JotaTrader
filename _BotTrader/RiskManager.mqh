@@ -1,4 +1,9 @@
-#pragma once
+//+------------------------------------------------------------------+
+//| Risk management module                                           |
+//+------------------------------------------------------------------+
+#ifndef __BOTTRADER_RISK_MQH__
+#define __BOTTRADER_RISK_MQH__
+
 #include <_BotTrader/Parameters.mqh>
 
 //+------------------------------------------------------------------+
@@ -174,4 +179,5 @@ double CalculateLotSize(const double entry_price,const double stop_loss)
 
    return(lot);
   }
+#endif // __BOTTRADER_RISK_MQH__
 //+------------------------------------------------------------------+

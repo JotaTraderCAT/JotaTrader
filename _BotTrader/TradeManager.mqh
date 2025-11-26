@@ -1,4 +1,9 @@
-#pragma once
+//+------------------------------------------------------------------+
+//| Trade management module                                          |
+//+------------------------------------------------------------------+
+#ifndef __BOTTRADER_TRADE_MQH__
+#define __BOTTRADER_TRADE_MQH__
+
 #include <Trade/Trade.mqh>
 #include <Trade/PositionInfo.mqh>
 #include <_BotTrader/Parameters.mqh>
@@ -100,4 +105,5 @@ bool UpdateStopLoss(const double new_sl)
      }
    return(true);
   }
+#endif // __BOTTRADER_TRADE_MQH__
 //+------------------------------------------------------------------+
