@@ -33,9 +33,14 @@ void SignalsDeinit()
 //+------------------------------------------------------------------+
 ESignalAction CheckEntrySignal(const SIndicatorData &data)
   {
-   const string symbol=ActiveSymbol();
-   const ENUM_TIMEFRAMES tf=ActiveTimeframe();
-   const double point=SymbolInfoDouble(symbol,SYMBOL_POINT);
+    const string symbol=ActiveSymbol();
+    const ENUM_TIMEFRAMES tf=ActiveTimeframe();
+    double point=0.0;
+    if(!SymbolInfoDouble(symbol,SYMBOL_POINT,point))
+      {
+       Print("[Signals] Failed to obtain point size for ",symbol,". Error: ",GetLastError());
+       return(SIGNAL_NONE);
+      }
 
    double price_source=0.0;
    if(Inp_RupturaUsarCierre)
@@ -48,10 +53,16 @@ ESignalAction CheckEntrySignal(const SIndicatorData &data)
         }
       price_source=closes[0];
      }
-   else
-     {
-      price_source=SymbolInfoDouble(symbol,SYMBOL_ASK);
-     }
+    else
+      {
+       double ask=0.0;
+       if(!SymbolInfoDouble(symbol,SYMBOL_ASK,ask))
+         {
+          Print("[Signals] Failed to copy ask price. Error: ",GetLastError());
+          return(SIGNAL_NONE);
+         }
+       price_source=ask;
+      }
 
    double breakout_level=data.donchianHighEntry + (Inp_RupturaBufferPuntos*point);
    if(price_source>breakout_level)

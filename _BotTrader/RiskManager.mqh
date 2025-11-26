@@ -98,7 +98,12 @@ double RiskManagerNormalizeStopLoss(const double entry_price,const double sl_pri
    const string symbol=ActiveSymbol();
    double normalized_sl=sl_price;
 
-   double point=SymbolInfoDouble(symbol,SYMBOL_POINT);
+   double point=0.0;
+   if(!SymbolInfoDouble(symbol,SYMBOL_POINT,point))
+     {
+      Print("[Risk] Failed to obtain point size for ",symbol,". Error: ",GetLastError());
+      return(sl_price);
+     }
    int digits=(int)SymbolInfoInteger(symbol,SYMBOL_DIGITS);
 
    normalized_sl=NormalizeDouble(normalized_sl,digits);
@@ -128,9 +133,17 @@ double RiskManagerNormalizeStopLoss(const double entry_price,const double sl_pri
 double CalculateLotSize(const double entry_price,const double stop_loss)
   {
    const string symbol=ActiveSymbol();
-   double min_lot=SymbolInfoDouble(symbol,SYMBOL_VOLUME_MIN);
-   double max_lot=SymbolInfoDouble(symbol,SYMBOL_VOLUME_MAX);
-   double lot_step=SymbolInfoDouble(symbol,SYMBOL_VOLUME_STEP);
+   double min_lot=0.0;
+   double max_lot=0.0;
+   double lot_step=0.0;
+
+   if(!SymbolInfoDouble(symbol,SYMBOL_VOLUME_MIN,min_lot) ||
+      !SymbolInfoDouble(symbol,SYMBOL_VOLUME_MAX,max_lot) ||
+      !SymbolInfoDouble(symbol,SYMBOL_VOLUME_STEP,lot_step))
+     {
+      Print("[Risk] Failed to load trading volume limits for ",symbol,". Error: ",GetLastError());
+      return(0.0);
+     }
 
    if(Inp_UseFixedLot)
      {
@@ -145,8 +158,15 @@ double CalculateLotSize(const double entry_price,const double stop_loss)
    double balance=AccountInfoDouble(ACCOUNT_BALANCE);
    double risk_amount=balance*(Inp_RiskPercent/100.0);
 
-   double tick_value=SymbolInfoDouble(symbol,SYMBOL_TRADE_TICK_VALUE);
-   double tick_size=SymbolInfoDouble(symbol,SYMBOL_TRADE_TICK_SIZE);
+   double tick_value=0.0;
+   double tick_size=0.0;
+   if(!SymbolInfoDouble(symbol,SYMBOL_TRADE_TICK_VALUE,tick_value) ||
+      !SymbolInfoDouble(symbol,SYMBOL_TRADE_TICK_SIZE,tick_size))
+     {
+      Print("[Risk] Failed to obtain tick data for ",symbol,". Error: ",GetLastError());
+      return(0.0);
+     }
+
    if(tick_value<=0.0 || tick_size<=0.0)
      {
       Print("[Risk] Invalid tick data for lot calculation");
@@ -161,7 +181,14 @@ double CalculateLotSize(const double entry_price,const double stop_loss)
      }
 
    double money_per_point=tick_value/tick_size;
-   double stop_points=stop_distance/SymbolInfoDouble(symbol,SYMBOL_POINT);
+   double point=0.0;
+   if(!SymbolInfoDouble(symbol,SYMBOL_POINT,point))
+     {
+      Print("[Risk] Failed to obtain point size for lot calculation. Error: ",GetLastError());
+      return(0.0);
+     }
+
+   double stop_points=stop_distance/point;
    if(stop_points<=0.0)
      {
       Print("[Risk] Stop points <= 0");
